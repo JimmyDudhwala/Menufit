@@ -1,0 +1,22 @@
+{
+  "kgmid": "/g/1q5gjdxrz",
+  "restaurant_name": "McDonald's",
+  "source_type": "manual",
+  "source_url": null,
+  "capture_format": "json",
+  "notes": "Example: paste items you typed or copied from Swiggy",
+  "items": [
+    {
+      "category": "Burgers",
+      "name": "McChicken Burger",
+      "price": 129,
+      "veg_flag": false
+    },
+    {
+      "category": "Beverages",
+      "name": "Cold Coffee",
+      "price": 149,
+      "veg_flag": true
+    }
+  ]
+}

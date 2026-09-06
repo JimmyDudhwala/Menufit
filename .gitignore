@@ -1,0 +1,16 @@
+.venv/
+node_modules/
+.env
+dist/
+*.log
+.DS_Store
+
+# Large / regenerable local data
+data/menu-assets/
+data/raw-menus/
+restaurant-in-surat-gujarat-india.csv
+
+# Capture drafts except the checked-in example
+data/captures/*
+!data/captures/example-manual.json
+!data/captures/.gitkeep
