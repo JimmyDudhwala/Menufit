@@ -136,3 +136,13 @@ published → sync to server later
 | `menu_item_analysis` | P1/P2 nutrition + attributes + tags |
 
 See `sql/001_schema.sql` and `sql/002_menu_assets.sql`.
+
+## Run Pass 1 (P0)
+
+```bash
+source .venv/bin/activate
+# .env → ANTHROPIC_API_KEY=...
+python3 scripts/extract-menus-llm.py --dry-run
+python3 scripts/extract-menus-llm.py --limit 3
+python3 scripts/extract-menus-llm.py
+```
