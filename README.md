@@ -7,7 +7,7 @@ Laptop owns **data collection + enrichment**. Server later serves users/subscrip
 | Step | What | Status |
 |------|------|--------|
 | **1a. Collect** | Store menu PDFs / images / HTML | Done for Adajan (~260 restaurants) |
-| **1b. Extract** | LLM → name, price, category, veg | Next (needs API key) |
+| **1b. Extract** | LLM → name, price, category, veg | Ready (`scripts/extract-menus-llm.py`) |
 | **2. Enrich** | Ingredients, macros, spice, sugar, tags | After extract |
 | **3. Sync** | Push published rows to server | Later |
 
@@ -58,14 +58,31 @@ python3 scripts/asset-status.py
 
 ---
 
-## Extract (not wired yet)
+## Extract (Pass 1 / P0)
+
+Needs `ANTHROPIC_API_KEY` in `.env`. Extracts only what is printed: name, price (or `null`), category, veg flag.
 
 ```bash
-# .env → ANTHROPIC_API_KEY=...
-python3 scripts/extract-menus-llm.py   # TODO
+# preview the queue (no API spend)
+python3 scripts/extract-menus-llm.py --dry-run
+
+# smoke test a few restaurants
+python3 scripts/extract-menus-llm.py --limit 3
+
+# one place
+python3 scripts/extract-menus-llm.py --name "Simply Madras"
+
+# full Adajan pending set
+python3 scripts/extract-menus-llm.py
 ```
 
-Pass 1 = P0 fields from image/PDF. Pass 2 = P1/P2 enrichment. See extract doc.
+If a capture JSON already exists (manual or earlier vision paste):
+
+```bash
+python3 scripts/promote-captures.py
+```
+
+Resume-safe: already-extracted restaurants are skipped. Use `--force` to redo. Pass 2 (nutrition) is not run here. See [docs/EXTRACT_PRIORITY.md](docs/EXTRACT_PRIORITY.md).
 
 ---
 
@@ -73,4 +90,3 @@ Pass 1 = P0 fields from image/PDF. Pass 2 = P1/P2 enrichment. See extract doc.
 
 - **Swiggy** headless screenshots are blocked; URLs kept in `menu_assets`. Prefer GMaps menu photos + PDFs + LLM.
 - Do not invent prices. Mark all generated nutrition as estimated.
-# Menufit

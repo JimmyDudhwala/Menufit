@@ -27,6 +27,7 @@ def main() -> None:
         """
         SELECT COUNT(DISTINCT restaurant_id) FROM menu_assets
         WHERE local_path IS NOT NULL AND extract_status = 'pending'
+          AND restaurant_id NOT IN (SELECT DISTINCT restaurant_id FROM menu_items)
         """
     )
     files_pending_extract = cur.fetchone()[0]
@@ -39,6 +40,12 @@ def main() -> None:
     )
     extracted = cur.fetchone()[0]
 
+    cur.execute("SELECT COUNT(*) FROM menu_items")
+    item_rows = cur.fetchone()[0]
+
+    cur.execute("SELECT COUNT(DISTINCT restaurant_id) FROM menu_items")
+    restaurants_with_items = cur.fetchone()[0]
+
     cur.execute(
         """
         SELECT COUNT(*) FROM restaurants r
@@ -50,7 +57,9 @@ def main() -> None:
     print(f"Restaurants:              {total}")
     print(f"With any menu_asset row:  {with_asset}")
     print(f"Local files ready for LLM:{files_pending_extract}")
-    print(f"Already LLM-extracted:    {extracted}")
+    print(f"Assets marked extracted:  {extracted}")
+    print(f"P0 menu_items rows:       {item_rows}")
+    print(f"Restaurants with items:   {restaurants_with_items}")
     print(f"Still no asset at all:    {missing}")
     print()
 
